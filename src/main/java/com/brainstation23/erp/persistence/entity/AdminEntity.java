@@ -1,6 +1,8 @@
 package com.brainstation23.erp.persistence.entity;
 
 import com.brainstation23.erp.constant.EntityConstant;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,5 +28,7 @@ public class AdminEntity {
     private String lastName;
     @OneToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
+    @JsonIgnoreProperties("adminEntity")
     private UserEntity userEntity;
 }

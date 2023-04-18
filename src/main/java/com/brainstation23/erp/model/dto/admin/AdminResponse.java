@@ -13,7 +13,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class AdminResponse {
-    @Schema(description = "Organization ID", example = "3F41A301-25ED-4F0F-876F-7657BEABB00F")
+    @Schema(description = "Admin ID", example = "3F41A301-25ED-4F0F-876F-7657BEABB00F")
     private UUID id;
 
     @Schema(description = "Admin First Name", example = "Jon")
