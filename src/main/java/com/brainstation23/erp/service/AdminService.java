@@ -22,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class AdminService {
-    public static final String ORGANIZATION_NOT_FOUND = "Admin Not Found";
+    public static final String ADMIN_NOT_FOUND = "Admin Not Found";
     private final UserRepository userRepository;
     private final AdminRepository adminRepository;
     private final AdminMapper adminMapper;
@@ -34,7 +34,7 @@ public class AdminService {
 
     public Admin getOne(UUID id) {
         var entity = adminRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(ORGANIZATION_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(ADMIN_NOT_FOUND));
         return adminMapper.entityToDomain(entity);
     }
 
@@ -42,7 +42,7 @@ public class AdminService {
         var userEntity = new UserEntity();
         userEntity.setId(UUID.randomUUID())
                 .setEmail(createRequest.getEmail())
-                .setPassword(createRequest.getPassword())
+                .setPassword(createRequest.getPassword()) // TODO: apply encryption
                 .setUserRole(UserRole.ADMIN);
         var createdUserEntity = userRepository.save(userEntity);
 
@@ -58,7 +58,7 @@ public class AdminService {
 
     public void updateOne(UUID id, UpdateAdminRequest updateRequest) {
         var entity = adminRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(ORGANIZATION_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(ADMIN_NOT_FOUND));
         entity.setFirstName(updateRequest.getFirstName()).setLastName(updateRequest.getLastName());
         adminRepository.save(entity);
     }
