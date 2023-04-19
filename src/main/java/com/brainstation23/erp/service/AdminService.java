@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -26,6 +27,7 @@ public class AdminService {
     private final UserRepository userRepository;
     private final AdminRepository adminRepository;
     private final AdminMapper adminMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public Page<Admin> getAll(Pageable pageable) {
         var entities = adminRepository.findAll(pageable);
@@ -40,9 +42,10 @@ public class AdminService {
 
     public UUID createOne(CreateAdminRequest createRequest) {
         var userEntity = new UserEntity();
+        String encodedPassword = passwordEncoder.encode(createRequest.getPassword());
         userEntity.setId(UUID.randomUUID())
                 .setEmail(createRequest.getEmail())
-                .setPassword(createRequest.getPassword()) // TODO: apply encryption
+                .setPassword(encodedPassword) // TODO: apply encryption
                 .setUserRole(UserRole.ADMIN);
         var createdUserEntity = userRepository.save(userEntity);
 

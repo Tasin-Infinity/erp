@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -26,6 +27,7 @@ public class EmployeeService {
     private final UserRepository userRepository;
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public Page<User> getAll(Pageable pageable) {
         var entities = userRepository.findAll(pageable);
@@ -40,9 +42,10 @@ public class EmployeeService {
 
     public UUID createOne(CreateEmployeeRequest createRequest) {
         var userEntity = new UserEntity();
+        String encodedPassword = passwordEncoder.encode(createRequest.getPassword());
         userEntity.setId(UUID.randomUUID())
                 .setEmail(createRequest.getEmail())
-                .setPassword(createRequest.getPassword()) // TODO: apply encryption
+                .setPassword(encodedPassword) // TODO: apply encryption
                 .setUserRole(UserRole.EMPLOYEE)
                 .setAdminEntity(null);
 
